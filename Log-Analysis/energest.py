@@ -1,22 +1,25 @@
-INPUT_FILE = "loglistener.txt"
+import sys
+
+INPUT_FILE = sys.argv[1]
 # From Z1 node datasheet
 CURRENT_MA = {
-    "CPU" : 10,
-    "LPM" : 0.023,
-    "Deep LPM" : 0, # not used by Z1 nodes
-    "Radio Rx" : 18.8,
-    "Radio Tx" : 17.4,
+    "CPU": 10,
+    "LPM": 0.023,
+    "Deep LPM": 0,  # not used by Z1 nodes
+    "Radio Rx": 18.8,
+    "Radio Tx": 17.4,
 }
 
 STATES = list(CURRENT_MA.keys())
 
-VOLTAGE = 3.0 # assume 3 volt batteries
+VOLTAGE = 3.0  # assume 3 volt batteries
 RTIMER_ARCH_SECOND = 32768
+
 
 def main():
     node_ticks = {}
     node_total_ticks = {}
-    
+
     with open(INPUT_FILE, "r") as f:
         for line in f:
             if "INFO: Energest" not in line:
@@ -27,11 +30,10 @@ def main():
             except:
                 print("Error while reading")
                 continue
-                
 
             if node not in node_ticks:
                 # initialize to zero
-                node_ticks[node] = { u : 0  for u in STATES }
+                node_ticks[node] = {u: 0 for u in STATES}
                 node_total_ticks[node] = 0
 
             try:
@@ -67,6 +69,6 @@ def main():
         print("Node {}: {:.2f} mC ({:.3f} mAh) charge consumption, {:.2f} mJ energy consumption in {:.2f} seconds".format(
             node, total_charge_mC, total_charge_mC / 3600.0, total_energy_mJ, period_seconds))
 
+
 if __name__ == "__main__":
     main()
-    
