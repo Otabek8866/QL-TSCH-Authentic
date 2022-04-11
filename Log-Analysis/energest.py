@@ -55,6 +55,7 @@ def main():
                 print("Failed to process line '{}': {}".format(line, ex))
 
     nodes = sorted(node_ticks.keys())
+    total_consumption = 0.0
     for node in nodes:
         total_avg_current_mA = 0
         period_ticks = node_total_ticks[node]
@@ -66,8 +67,10 @@ def main():
             total_avg_current_mA += state_avg_current_mA
         total_charge_mC = period_ticks * total_avg_current_mA / RTIMER_ARCH_SECOND
         total_energy_mJ = total_charge_mC * VOLTAGE
+        total_consumption += total_energy_mJ
         print("Node {}: {:.2f} mC ({:.3f} mAh) charge consumption, {:.2f} mJ energy consumption in {:.2f} seconds".format(
             node, total_charge_mC, total_charge_mC / 3600.0, total_energy_mJ, period_seconds))
+    print("Total consumption: {:.2f} kJ".format(total_consumption/1000000.0))
 
 
 if __name__ == "__main__":
