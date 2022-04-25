@@ -1,4 +1,6 @@
-INPUT_FILE = "loglistener.txt"
+import sys
+
+INPUT_FILE = sys.argv[1]
 
 delays = {}
 pkt_sent = {}
@@ -61,7 +63,8 @@ def main():
     print("\n********* Average Delays for each Node *********")
     for i in sorted(delays.keys()):
         if len(delays[i][0]) != 0:
-            print("Node {}: {:.2f} ms".format(i, sum(delays[i][0])/len(delays[i][0])))
+            print("Node {}: {:.2f} ms".format(
+                i, sum(delays[i][0])/len(delays[i][0])))
         else:
             print("Node {}: No packet received -> No Delay".format(i))
         print("Packet IDs not received: {}".format(delays[i][1]))
