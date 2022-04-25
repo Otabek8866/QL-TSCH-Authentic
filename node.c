@@ -293,7 +293,7 @@ PROCESS_THREAD(node_udp_process, ev, data)
         seqnum++;
       }
     }
-    etimer_set(&periodic_timer, SEND_INTERVAL);
+    etimer_set(&periodic_timer, (random_rand()%PACKET_SENDING_INTERVAL + 1) * CLOCK_SECOND);
   }
   PROCESS_END();
 }
