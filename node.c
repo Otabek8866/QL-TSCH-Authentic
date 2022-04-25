@@ -16,7 +16,7 @@
 #define UDP_PORT 8765
 
 // period to send a packet to the udp server
-#define SEND_INTERVAL (PACKET_SENDING_INTERVAL * CLOCK_SECOND)
+#define CONVERGENCE_TIME (500 * CLOCK_SECOND)
 
 // period to to check Tx status
 #define TIME_10MS (CLOCK_SECOND * 0.01)
@@ -252,8 +252,12 @@ PROCESS_THREAD(node_udp_process, ev, data)
   // if this is a simple node, start sending upd packets
   LOG_INFO("Started UDP communication\n");
 
+  // wait till network is converged
+  etimer_set(&periodic_timer, CONVERGENCE_TIME);
+  PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
+
   // start the timer for periodic udp packet sending
-  etimer_set(&periodic_timer, SEND_INTERVAL);
+  etimer_set(&periodic_timer, (random_rand()%PACKET_SENDING_INTERVAL + 1) * CLOCK_SECOND);
   
   /* Main UDP comm Loop */
   while (1)
