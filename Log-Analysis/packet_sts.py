@@ -66,6 +66,7 @@ def main():
             print("Node {}: No packet received -> No Delay".format(i))
         print("Packet IDs not received: {}".format(delays[i][1]))
         print("Packet Delivery Ratio: {:.2f}%".format(delays[i][2]))
+        print("Total sent packets:", len(pkt_sent[i]))
         print('-' * 50)
     print("Number of Active Nodes:", len(pkt_sent))
     print("Active nodes:", sorted(pkt_sent.keys()))
